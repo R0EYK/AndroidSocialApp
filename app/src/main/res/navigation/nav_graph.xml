@@ -5,6 +5,7 @@
     app:startDestination="@id/loginFragment">
 
 
+
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.androidsocialapp.LoginFragment"
@@ -13,7 +14,15 @@
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_protectedArea"
+            app:destination="@id/protectedAreaFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/protectedAreaFragment"
+        android:name="com.example.androidsocialapp.ProtectedAreaFragment"
+        android:label="Protected Area"
+        tools:layout="@layout/fragment_protected_area" />
 
     <fragment
         android:id="@+id/registerFragment"
