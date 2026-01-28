@@ -46,6 +46,27 @@ class PostAdapter(private val posts: List<Post>) : RecyclerView.Adapter<PostAdap
         } else {
             holder.postImage.visibility = View.GONE
         }
+
+        holder.itemView.setOnClickListener {
+            val fragment = PostDetailFragment()
+            val args = android.os.Bundle().apply {
+                putString("category", post.category)
+                putString("content", post.content)
+                putString("createdAt", post.createdAt)
+                putString("postedBy", post.postedBy)
+                post.imageRes?.let { putInt("imageRes", it) }
+            }
+            fragment.arguments = args
+
+            val activity = holder.itemView.context as? androidx.fragment.app.FragmentActivity
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(
+                    com.example.androidsocialapp.R.id.nav_host_fragment,
+                    fragment
+                )
+                ?.addToBackStack(null)
+                ?.commit()
+        }
     }
 
     override fun getItemCount() = posts.size
