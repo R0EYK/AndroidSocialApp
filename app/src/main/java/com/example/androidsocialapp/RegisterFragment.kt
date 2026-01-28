@@ -1,12 +1,24 @@
 package com.example.androidsocialapp
 
+import android.app.Activity
+import android.app.AlertDialog
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.androidsocialapp.databinding.FragmentRegisterBinding
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class RegisterFragment : Fragment() {
     private var _binding: FragmentRegisterBinding? = null
@@ -20,10 +32,58 @@ class RegisterFragment : Fragment() {
         return binding.root
     }
 
+    private var selectedImageUri: Uri? = null
+    private var cameraImageUri: Uri? = null
+
+    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let {
+            selectedImageUri = it
+            binding.ivProfileImage.setImageURI(it)
+        }
+    }
+
+    private val takePictureLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success: Boolean ->
+        if (success && cameraImageUri != null) {
+            selectedImageUri = cameraImageUri
+            binding.ivProfileImage.setImageURI(cameraImageUri)
+        }
+    }
+
+    private fun createImageFile(context: Context): File {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            "JPEG_${timeStamp}_",
+            ".jpg",
+            storageDir
+        )
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btnLoginTab.setOnClickListener {
             findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToLoginFragment())
+        }
+        binding.profileImageContainer.setOnClickListener {
+            val options = arrayOf("Choose from Gallery", "Take a Photo")
+            AlertDialog.Builder(requireContext())
+                .setTitle("Select Profile Image")
+                .setItems(options) { _, which ->
+                    when (which) {
+                        0 -> pickImageLauncher.launch("image/*")
+                        1 -> {
+                            val imageFile = createImageFile(requireContext())
+                            val uri = FileProvider.getUriForFile(
+                                requireContext(),
+                                requireContext().packageName + ".provider",
+                                imageFile
+                            )
+                            cameraImageUri = uri
+                            takePictureLauncher.launch(uri)
+                        }
+                    }
+                }
+                .show()
         }
         // TODO: Add register logic here
     }
