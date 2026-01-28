@@ -26,6 +26,9 @@ class LoginFragment : Fragment() {
         binding.btnRegisterTab.setOnClickListener {
             findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
         }
+        binding.btnLogin.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_protectedArea)
+        }
         // TODO: Add login logic here
     }
 
