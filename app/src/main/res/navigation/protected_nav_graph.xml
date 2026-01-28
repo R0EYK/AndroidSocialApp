@@ -13,6 +13,6 @@
         android:label="Create" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.androidsocialapp.ProfileFragment"
+        android:name="com.example.androidsocialapp.ui.ProfileFragment"
         android:label="Profile" />
 </navigation>
