@@ -6,6 +6,8 @@
 
 
 
+
+
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.androidsocialapp.LoginFragment"
@@ -17,6 +19,23 @@
         <action
             android:id="@+id/action_loginFragment_to_protectedArea"
             app:destination="@id/protectedAreaFragment" />
+    </fragment>
+
+    <!-- Global action moved back inside loginFragment for SafeArgs compatibility -->
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.androidsocialapp.LoginFragment"
+        android:label="Login"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_protectedArea"
+            app:destination="@id/protectedAreaFragment" />
+        <action
+            android:id="@+id/action_global_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/protectedAreaFragment"
