@@ -79,16 +79,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Username"
+                android:text="Email"
                 android:textColor="#222"
                 android:textSize="14sp" />
 
             <EditText
-                android:id="@+id/etUsername"
+                android:id="@+id/etEmail"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:background="@drawable/edittext_bg"
-                android:hint="Enter username"
+                android:hint="Enter email"
+                android:inputType="textEmailAddress"
                 android:padding="12dp"
                 android:textColor="#222"
                 android:textColorHint="#AAA" />
@@ -165,6 +166,14 @@
                 android:background="@drawable/btn_primary_bg"
                 android:text="Register"
                 android:textColor="#FFF" />
+
+            <ProgressBar
+                android:id="@+id/progressRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="12dp"
+                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
