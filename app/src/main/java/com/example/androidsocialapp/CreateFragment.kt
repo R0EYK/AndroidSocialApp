@@ -114,6 +114,15 @@ class CreateFragment : Fragment() {
         )
     }
 
+    private fun getUserDisplayName(user: com.google.firebase.auth.FirebaseUser?): String {
+        return when {
+            !user?.displayName.isNullOrBlank() -> user?.displayName!!
+            !user?.email.isNullOrBlank() -> user?.email!!
+            !user?.uid.isNullOrBlank() -> user?.uid!!
+            else -> "Anonymous"
+        }
+    }
+
     private fun setupSubmitButton() {
         binding.btnSubmit.setOnClickListener {
             val category = selectedCategory
@@ -134,15 +143,14 @@ class CreateFragment : Fragment() {
                 "category" to category.displayName,
                 "description" to description,
                 "createdAt" to Date(),
-                "postedBy" to (user?.displayName ?: user?.email ?: user?.uid ?: "Anonymous")
+                "postedBy" to getUserDisplayName(user)
             )
             db.collection("posts")
                 .add(post)
                 .addOnSuccessListener {
                     android.widget.Toast.makeText(requireContext(), "Post submitted!", android.widget.Toast.LENGTH_SHORT).show()
-                    // Navigate to FeedFragment using the child NavController
-                    androidx.navigation.Navigation.findNavController(requireView())
-                        .navigate(com.example.androidsocialapp.R.id.action_createFragment_to_feedFragment)
+                    // Navigate to FeedFragment using the fragment's NavController
+                    findNavController().navigate(com.example.androidsocialapp.R.id.action_createFragment_to_feedFragment)
                 }
                 .addOnFailureListener { e ->
                     android.widget.Toast.makeText(requireContext(), "Failed to submit: ${e.localizedMessage}", android.widget.Toast.LENGTH_SHORT).show()
