@@ -55,7 +55,7 @@
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.androidsocialapp.ui.ProfileFragment"
+        android:name="com.example.androidsocialapp.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
 
