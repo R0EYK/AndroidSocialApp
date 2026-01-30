@@ -10,7 +10,11 @@
     <fragment
         android:id="@+id/createFragment"
         android:name="com.example.androidsocialapp.CreateFragment"
-        android:label="Create" />
+        android:label="Create">
+        <action
+            android:id="@+id/action_createFragment_to_feedFragment"
+            app:destination="@id/feedFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.androidsocialapp.ui.ProfileFragment"
