@@ -6,6 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.androidsocialapp.databinding.FragmentCreateBinding
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.FirebaseAuth
+import java.util.Date
+import androidx.navigation.fragment.findNavController
 
 class CreateFragment : Fragment() {
     private var _binding: FragmentCreateBinding? = null
@@ -114,7 +118,6 @@ class CreateFragment : Fragment() {
         binding.btnSubmit.setOnClickListener {
             val category = selectedCategory
             val description = binding.editDescription.text.toString().trim()
-            // TODO: handle photo
             if (category == null) {
                 android.widget.Toast.makeText(requireContext(), "Please select a category", android.widget.Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -123,8 +126,27 @@ class CreateFragment : Fragment() {
                 android.widget.Toast.makeText(requireContext(), "Please enter a description", android.widget.Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            // TODO: Submit logic here, selectedImageUri is the image
-            android.widget.Toast.makeText(requireContext(), "Submitted!", android.widget.Toast.LENGTH_SHORT).show()
+
+            // Firestore integration (skip image for now)
+            val db = FirebaseFirestore.getInstance()
+            val user = FirebaseAuth.getInstance().currentUser
+            val post = hashMapOf(
+                "category" to category.displayName,
+                "description" to description,
+                "createdAt" to Date(),
+                "postedBy" to (user?.displayName ?: user?.email ?: user?.uid ?: "Anonymous")
+            )
+            db.collection("posts")
+                .add(post)
+                .addOnSuccessListener {
+                    android.widget.Toast.makeText(requireContext(), "Post submitted!", android.widget.Toast.LENGTH_SHORT).show()
+                    // Navigate to FeedFragment using the child NavController
+                    androidx.navigation.Navigation.findNavController(requireView())
+                        .navigate(com.example.androidsocialapp.R.id.action_createFragment_to_feedFragment)
+                }
+                .addOnFailureListener { e ->
+                    android.widget.Toast.makeText(requireContext(), "Failed to submit: ${e.localizedMessage}", android.widget.Toast.LENGTH_SHORT).show()
+                }
         }
     }
 
